@@ -2,7 +2,12 @@
 cmake_minimum_required(VERSION 3.10)
 project(mini_bitcoin)
 
+
+# Set C++ standard and architecture
 set(CMAKE_CXX_STANDARD 17)
+# Set the architecture to x64
+set(CMAKE_GENERATOR_PLATFORM x64)
+
 
 # Windows 專用建構提示
 if(WIN32)
@@ -26,8 +31,9 @@ add_executable(mini_bitcoin
     main.cpp
     Block.cpp
     sha256.cpp
+    crypto.cpp
     Transaction.cpp
     UTXOManager.cpp
 )
 
-target_link_libraries(mini_bitcoin OpenSSL::Crypto OpenSSL::SSL)
+target_link_libraries(mini_bitcoin OpenSSL::Crypto OpenSSL::SSL ws2_32 crypt32)

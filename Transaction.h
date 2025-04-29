@@ -6,6 +6,8 @@
 struct TxIn {
     std::string prevTxId;
     int outputIndex;
+    std::string signature;
+    std::string publicKey;
 };
 
 struct TxOut {
@@ -18,7 +20,6 @@ public:
     std::string id;
     std::vector<TxIn> inputs;
     std::vector<TxOut> outputs;
-
     Transaction(const std::vector<TxIn>& in, const std::vector<TxOut>& out);
     std::string calculateHash() const;
 };

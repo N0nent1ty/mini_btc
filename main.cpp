@@ -2,6 +2,7 @@
 #include "Block.h"
 #include "Transaction.h"
 #include "UTXOManager.h"
+#include "crypto.h"
 #include <iostream>
 #include <iomanip>
 
@@ -25,43 +26,41 @@ uint64_t adjustDifficulty(uint64_t previousDifficulty, uint64_t actualTimeTakenS
 int main() {
     UTXOManager utxoManager;
 
-    // 建立創世區塊（暫時不使用交易物件）
-    Block genesis(0, {}, "0");
-    genesis.mineBlock(3);
-
-    std::cout << "Genesis Block Mined:\n" << genesis << std::endl;
-
-    // 建立一筆模擬交易：Alice 轉帳 5 BTC 給 Bob
-    Transaction coinbase({}, { TxOut{"Alice", 10.0} });
+    auto [alicePrivKey, alicePubKey] = generateKeyPair();
+    std::cout << "Alice Private Key: " << alicePrivKey << "\n";
+    std::cout << "Alice Public Key:  " << alicePubKey << "\n";
+    
+    // 2. 產生 Bob 的金鑰對（用來收錢，但這裡不需要簽名）
+    auto [bobPrivKey, bobPubKey] = generateKeyPair();
+    std::cout << "Bob Public Key:  " << bobPubKey << "\n";
+    
+    // 3. 假設 Alice 有一筆先前coinbase得到的UTXO
+    Transaction coinbase({}, { TxOut{ alicePubKey, 10.0 } });
     utxoManager.addTransaction(coinbase);
-
-    TxIn in{ coinbase.id, 0 };
-    TxOut out1{ "Bob", 5.0 };
-    TxOut out2{ "Alice", 5.0 }; // 找零回 Alice
-    Transaction tx1({ in }, { out1, out2 });
-
-    if (utxoManager.isUnspent(in)) {
-        utxoManager.addTransaction(tx1);
-        std::cout << "\n=== Transaction from Alice to Bob ===\n";
-        std::cout << "TxID: " << tx1.id << "\n";
+    
+    // 4. Alice 發出一筆新交易：轉5 BTC給Bob，剩餘自己找零
+    TxIn input{ coinbase.id, 0, "", "" };
+    TxOut outputToBob{ bobPubKey, 5.0 };
+    TxOut changeBackToAlice{ alicePubKey, 5.0 };
+    Transaction tx({ input }, { outputToBob, changeBackToAlice });
+    
+    // 5. Alice 對交易進行簽名
+    std::string messageHash = tx.calculateHash();
+    std::string signature = signMessage(alicePrivKey, messageHash);
+    
+    // 6. 填入TxIn的簽名與公鑰
+    tx.inputs[0].signature = signature;
+    tx.inputs[0].publicKey = alicePubKey;
+    
+    // 7. 讓 UTXOManager 驗證交易
+    if (utxoManager.validateTransaction(tx)) {
+        std::cout << "\nTransaction validated successfully!\n";
+        utxoManager.addTransaction(tx);
+    
+        std::cout << "\n=== Final Balances ===\n";
+        std::cout << "Alice: " << utxoManager.getBalance(alicePubKey) << " BTC\n";
+        std::cout << "Bob:   " << utxoManager.getBalance(bobPubKey) << " BTC\n";
     } else {
-        std::cout << "\n[!] Invalid transaction: Input already spent or nonexistent.\n";
+        std::cout << "\n[!] Transaction validation failed!\n";
     }
-
-    std::cout << "\n=== UTXO Snapshot ===\n";
-    std::cout << "Alice Balance: " << utxoManager.getBalance("Alice") << " BTC\n";
-    std::cout << "Bob Balance:   " << utxoManager.getBalance("Bob") << " BTC\n";
-
-    uint64_t previousDifficulty = 1000000000;
-    uint64_t actualTimeTaken = 12 * 24 * 60 * 60;
-    uint64_t newDifficulty = adjustDifficulty(previousDifficulty, actualTimeTaken);
-
-    std::cout << std::fixed << std::setprecision(2);
-    std::cout << "\n=== Difficulty Adjustment Simulation ===\n";
-    std::cout << "Previous Difficulty: " << previousDifficulty << "\n";
-    std::cout << "Actual Time Taken: " << actualTimeTaken / 3600.0 << " hours\n";
-    std::cout << "Expected Time: " << EXPECTED_TIME / 3600.0 << " hours\n";
-    std::cout << "New Difficulty: " << newDifficulty << "\n";
-
-    return 0;
 }
