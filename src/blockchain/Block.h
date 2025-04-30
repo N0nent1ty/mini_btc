@@ -12,7 +12,7 @@ public:
 
     void mineBlock(int difficulty);
     std::string calculateHash() const;
-
+    std::string getPreviousHash() const { return prevHash; }
     friend std::ostream& operator<<(std::ostream& os, const Block& block);
 
 private:
