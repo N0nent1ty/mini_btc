@@ -1,6 +1,6 @@
 // Block.h
 #pragma once
-#include "Transaction.h"
+#include "../transaction/Transaction.h"
 #include <string>
 #include <vector>
 #include <ctime>

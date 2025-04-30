@@ -1,5 +1,5 @@
 // sha256.cpp
-#include "sha256.h"
+#include "SHA256.h"
 #include <openssl/sha.h>
 #include <sstream>
 #include <iomanip>

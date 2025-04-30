@@ -1,8 +1,8 @@
 // 初始 main.cpp（第一階段）
-#include "Block.h"
-#include "Transaction.h"
-#include "UTXOManager.h"
-#include "crypto.h"
+#include "./blockchain/Block.h"
+#include "./transaction/Transaction.h"
+#include "./utxomanager/UTXOManager.h"
+#include "./crypto/Crypto.h"
 #include <iostream>
 #include <iomanip>
 
@@ -26,6 +26,8 @@ uint64_t adjustDifficulty(uint64_t previousDifficulty, uint64_t actualTimeTakenS
 int main() {
     UTXOManager utxoManager;
 
+
+    // 1. 產生 Alice 的金鑰對（用來簽名）
     auto [alicePrivKey, alicePubKey] = generateKeyPair();
     std::cout << "Alice Private Key: " << alicePrivKey << "\n";
     std::cout << "Alice Public Key:  " << alicePubKey << "\n";

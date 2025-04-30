@@ -1,6 +1,6 @@
 // UTXOManager.cpp
 #include "UTXOManager.h"
-#include "crypto.h"
+#include "../crypto/crypto.h"
 #include <iostream>
 
 std::string toKey(const std::string& txid, int index) {
@@ -11,7 +11,7 @@ bool UTXOManager::validateTransaction(const Transaction& tx) const {
     std::string messageHash = tx.calculateHash();
 
     for (const auto& input : tx.inputs) {
-        // 用 txid + outputIndex 作為 key 查找
+        // Use txid + outputIndex as the key to find the UTXO
         std::string key = toKey(input.prevTxId, input.outputIndex);
         auto it = utxos.find(key);
 
@@ -22,20 +22,20 @@ bool UTXOManager::validateTransaction(const Transaction& tx) const {
 
         const auto& utxo = it->second;
 
-        // 檢查該UTXO的recipient是否為提供此input的公鑰
+        // Check if the recipient of the UTXO matches the public key provided in the input
         if (utxo.recipient != input.publicKey) {
             std::cerr << "[!] Public key does not match UTXO owner\n";
             return false;
         }
 
-        // 驗證簽章
+        // Verify the signature
         if (!verifySignature(input.publicKey, messageHash, input.signature)) {
             std::cerr << "[!] Signature verification failed\n";
             return false;
         }
     }
 
-    return true; // 所有 input 都合法，交易有效
+    return true; // All inputs are valid, the transaction is valid
 }
 
 

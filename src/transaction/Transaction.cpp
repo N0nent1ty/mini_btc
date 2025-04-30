@@ -1,6 +1,6 @@
 // Transaction.cpp
 #include "Transaction.h"
-#include "sha256.h"
+#include "../sha256/SHA256.h"
 #include <sstream>
 
 Transaction::Transaction(const std::vector<TxIn>& in, const std::vector<TxOut>& out)

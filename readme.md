@@ -16,7 +16,10 @@ This repository is created for learning about blockchain technology by reproduci
 - `Block.cpp` and `Block.h`: Implementation of the `Block` class, including mining and hashing.
 - `Transaction.cpp` and `Transaction.h`: Implementation of transactions.
 - `sha256.cpp` and `sha256.h`: SHA-256 hashing algorithm.
+- `crypto.cpp` and `crypto.h`: Additional cryptographic utilities.
 - `UTXOManager.cpp` and `UTXOManager.h`: Manage UTXOs for transaction validation.
+- `CMakeLists.txt`: Build configuration for the project.
+- `vcpkg.json`: Dependency management configuration for vcpkg.
 
 ## Prerequisites
 
@@ -35,7 +38,7 @@ This repository is created for learning about blockchain technology by reproduci
     ```bash
     vcpkg install openssl:x64-windows
     ```
-3. Configure and build the project
+3. Configure and build the project:
     ```bash
     mkdir build
     cd build
@@ -44,5 +47,13 @@ This repository is created for learning about blockchain technology by reproduci
     ```
 4. Run the executable:
     ```bash
-    mini_bitcoin.exe
+    .\Debug\mini_bitcoin.exe
     ```
+
+## Contributing
+
+Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.

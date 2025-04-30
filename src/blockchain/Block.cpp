@@ -1,6 +1,6 @@
 // Block.cpp
-#include "Block.h"
-#include "sha256.h"
+#include "../blockchain/Block.h"
+#include "../SHA256/sha256.h"
 #include <sstream>
 
 Block::Block(int idx, const std::vector<Transaction>& txs, const std::string& prev)

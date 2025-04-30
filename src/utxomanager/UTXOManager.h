@@ -1,7 +1,7 @@
 // UTXOManager.h
 // Unspent Transaction Output Manager
 #pragma once
-#include "Transaction.h"
+#include "../transaction/Transaction.h"
 #include <map>
 #include <string>
 

@@ -28,12 +28,12 @@ message(STATUS "CMAKE_TOOLCHAIN_FILE is set to: ${CMAKE_TOOLCHAIN_FILE}")
 find_package(OpenSSL REQUIRED)
 
 add_executable(mini_bitcoin
-    main.cpp
-    Block.cpp
-    sha256.cpp
-    crypto.cpp
-    Transaction.cpp
-    UTXOManager.cpp
+    src/main.cpp
+    src/blockchain/Block.cpp
+    src/utxomanager/UTXOManager.cpp
+    src/sha256/sha256.cpp
+    src/crypto/crypto.cpp
+    src/transaction/Transaction.cpp
 )
 
 target_link_libraries(mini_bitcoin OpenSSL::Crypto OpenSSL::SSL ws2_32 crypt32)
