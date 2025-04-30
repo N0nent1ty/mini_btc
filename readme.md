@@ -12,14 +12,13 @@ This repository is created for learning about blockchain technology by reproduci
 
 ## Project Structure
 
-- `main.cpp`: Entry point of the application.
-- `Block.cpp` and `Block.h`: Implementation of the `Block` class, including mining and hashing.
-- `Transaction.cpp` and `Transaction.h`: Implementation of transactions.
-- `sha256.cpp` and `sha256.h`: SHA-256 hashing algorithm.
-- `crypto.cpp` and `crypto.h`: Additional cryptographic utilities.
-- `UTXOManager.cpp` and `UTXOManager.h`: Manage UTXOs for transaction validation.
+- `src/main.cpp`: Entry point of the application.
+- `src/blockchain/Block.cpp` and `src/blockchain/Block.h`: Implementation of the `Block` class, including mining and hashing.
+- `src/transaction/Transaction.cpp` and `src/transaction/Transaction.h`: Implementation of transactions.
+- `src/sha256/sha256.cpp` and `src/sha256/sha256.h`: SHA-256 hashing algorithm.
+- `src/crypto/crypto.cpp` and `src/crypto/crypto.h`: Additional cryptographic utilities.
+- `src/utxomanager/UTXOManager.cpp` and `src/utxomanager/UTXOManager.h`: Manage UTXOs for transaction validation.
 - `CMakeLists.txt`: Build configuration for the project.
-- `vcpkg.json`: Dependency management configuration for vcpkg.
 
 ## Prerequisites
 

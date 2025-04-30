@@ -1,8 +1,8 @@
-// 初始 main.cpp（第一階段）
 #include "./blockchain/Block.h"
 #include "./transaction/Transaction.h"
 #include "./utxomanager/UTXOManager.h"
 #include "./crypto/Crypto.h"
+#include "./mempool/Mempool.h"
 #include <iostream>
 #include <iomanip>
 
@@ -25,7 +25,7 @@ uint64_t adjustDifficulty(uint64_t previousDifficulty, uint64_t actualTimeTakenS
 
 int main() {
     UTXOManager utxoManager;
-
+    Mempool mempool; // 新增 mempool 實例
 
     // 1. 產生 Alice 的金鑰對（用來簽名）
     auto [alicePrivKey, alicePubKey] = generateKeyPair();
@@ -56,13 +56,27 @@ int main() {
     
     // 7. 讓 UTXOManager 驗證交易
     if (utxoManager.validateTransaction(tx)) {
-        std::cout << "\nTransaction validated successfully!\n";
-        utxoManager.addTransaction(tx);
-    
-        std::cout << "\n=== Final Balances ===\n";
-        std::cout << "Alice: " << utxoManager.getBalance(alicePubKey) << " BTC\n";
-        std::cout << "Bob:   " << utxoManager.getBalance(bobPubKey) << " BTC\n";
+        mempool.addTransaction(tx); // 將有效交易放入 mempool
+        std::cout << "\nTransaction validated and added to mempool!\n";
     } else {
         std::cout << "\n[!] Transaction validation failed!\n";
     }
+
+
+     // 8.模擬礦工從 mempool 中取出交易打包區塊
+     std::vector<Transaction> blockTxs = mempool.selectTransactions(1); // 目前選一筆
+     Block newBlock(1, blockTxs, coinbase.calculateHash());
+     newBlock.mineBlock(3);
+     std::cout << "\nMined New Block:\n" << newBlock << std::endl;
+ 
+     // 9.將被打包的交易從 mempool 移除並更新 UTXO 狀態
+     for (const auto& tx : blockTxs) {
+         utxoManager.addTransaction(tx);
+         mempool.removeTransaction(tx.id);
+     }
+ 
+     std::cout << "\n=== Final Balances ===\n";
+     std::cout << "Alice: " << utxoManager.getBalance(alicePubKey) << " BTC\n";
+     std::cout << "Bob:   " << utxoManager.getBalance(bobPubKey) << " BTC\n";
+
 }

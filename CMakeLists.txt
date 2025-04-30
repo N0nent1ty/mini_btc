@@ -34,6 +34,7 @@ add_executable(mini_bitcoin
     src/sha256/sha256.cpp
     src/crypto/crypto.cpp
     src/transaction/Transaction.cpp
+    src/mempool/Mempool.cpp
 )
 
 target_link_libraries(mini_bitcoin OpenSSL::Crypto OpenSSL::SSL ws2_32 crypt32)
