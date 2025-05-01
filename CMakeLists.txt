@@ -2,6 +2,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(mini_bitcoin)
 
+add_subdirectory(src/Unittest)
 
 # Set C++ standard and architecture
 set(CMAKE_CXX_STANDARD 17)
@@ -30,9 +31,10 @@ find_package(OpenSSL REQUIRED)
 add_executable(mini_bitcoin
     src/main.cpp
     src/blockchain/Block.cpp
+    src/blockchain/BlockChain.cpp
     src/utxomanager/UTXOManager.cpp
-    src/sha256/sha256.cpp
-    src/crypto/crypto.cpp
+    src/sha256/SHA256.cpp
+    src/crypto/Crypto.cpp
     src/transaction/Transaction.cpp
     src/mempool/Mempool.cpp
 )

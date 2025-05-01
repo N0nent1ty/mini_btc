@@ -1,6 +1,7 @@
 // Block.h
 #pragma once
 #include "../transaction/Transaction.h"
+#include "../utxomanager/UTXOManager.h"
 #include <string>
 #include <vector>
 #include <ctime>
@@ -14,7 +15,8 @@ public:
     std::string calculateHash() const;
     std::string getPreviousHash() const { return prevHash; }
     friend std::ostream& operator<<(std::ostream& os, const Block& block);
-
+    bool validateTransactions(const UTXOManager& utxos) const;
+    
 private:
     int index;
     long timestamp;

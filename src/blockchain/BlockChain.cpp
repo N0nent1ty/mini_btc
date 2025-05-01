@@ -1,8 +1,9 @@
 // Blockchain.cpp
 #include "Blockchain.h"
+#include "../utxomanager/UTXOManager.h"
 #include <iostream>
 
-bool Blockchain::addBlock(const Block& block) {
+bool Blockchain::addBlock(const Block& block, const UTXOManager& utxos) {
     if (!chain.empty()) {
         const Block& prev = chain.back();
 
@@ -19,6 +20,14 @@ bool Blockchain::addBlock(const Block& block) {
             return false;
         }
     }
+
+
+    // 驗證目前打包中的區塊，所有交易的有效性, 避免打包交易數據時產生多花交易
+    if (!block.validateTransactions(utxos)) {
+        std::cerr << "[!] Block contains invalid transactions.\n";
+        return false;
+    }
+
     chain.push_back(block);
     return true;
 }

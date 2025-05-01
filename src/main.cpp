@@ -44,7 +44,7 @@ int main()
     Transaction coinbase({}, {TxOut{alicePubKey, 10.0}});
     Block genesisBlock(0, {coinbase}, "0");
     genesisBlock.mineBlock(3);         // 模擬挖礦，難度為3
-    blockchain.addBlock(genesisBlock); // 將創世區塊加入區塊鏈
+    blockchain.addBlock(genesisBlock, utxoManager); // 將創世區塊加入區塊鏈
     utxoManager.addTransaction(coinbase);
 
     // 4. Alice 發出一筆新交易：轉5 BTC給Bob，剩餘自己找零
@@ -80,7 +80,7 @@ int main()
     std::cout << "\nMined New Block:\n"
               << newBlock << std::endl;
 
-    blockchain.addBlock(newBlock); // 將新區塊加入區塊鏈
+    blockchain.addBlock(newBlock, utxoManager); // 將新區塊加入區塊鏈
 
     // 9.將被打包的交易從 mempool 移除並更新 UTXO 狀態
     for (const auto &tx : blockTxs)

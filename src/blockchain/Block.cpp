@@ -1,6 +1,7 @@
 // Block.cpp
 #include "../blockchain/Block.h"
-#include "../SHA256/sha256.h"
+#include "../sha256/SHA256.h"
+#include "../transaction/Transaction.h"
 #include <sstream>
 
 Block::Block(int idx, const std::vector<Transaction>& txs, const std::string& prev)
@@ -36,4 +37,17 @@ std::ostream& operator<<(std::ostream& os, const Block& block) {
         os << " - TxID: " << tx.id << "\n";
     }
     return os;
+}
+
+
+bool Block::validateTransactions(const UTXOManager& utxos) const {
+    UTXOManager temp = utxos;
+    for (const auto& tx : this->transactions) {
+        if (!temp.validateTransaction(tx)) {
+            std::cerr << "[!] Invalid transaction in block: " << tx.id << "\n";
+            return false;
+        }
+        temp.addTransaction(tx);
+    }
+    return true;
 }
