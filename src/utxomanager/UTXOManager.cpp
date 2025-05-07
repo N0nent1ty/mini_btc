@@ -82,3 +82,25 @@ double UTXOManager::getBalance(const std::string &address) const
     }
     return balance;
 }
+
+
+/*
+UTXOManager::getUTXO
+---------------------
+std::optional<TxOut> getUTXO(const std::string& txid, int index) const
+
+This method queries the UTXO map to find a specific unspent transaction output (UTXO) 
+given a transaction ID and the output index.
+
+- It builds the key as "txid:index" and looks up the map.
+- If found, it returns the corresponding TxOut wrapped in std::optional.
+- If not found, it returns std::nullopt to indicate the output is no longer available
+  (e.g., already spent).
+
+This helps ensure safe lookup and allows calling code to handle cases where UTXO may not exist.
+*/
+std::optional<TxOut> UTXOManager::getUTXO(const std::string& txid, int index) const {
+    auto it = this->utxos.find(txid + ":" + std::to_string(index));
+    if (it != this->utxos.end()) return it->second;
+    return std::nullopt;
+}
