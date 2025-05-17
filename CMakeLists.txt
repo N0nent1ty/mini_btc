@@ -40,3 +40,21 @@ add_executable(mini_bitcoin
 )
 
 target_link_libraries(mini_bitcoin OpenSSL::Crypto OpenSSL::SSL ws2_32 crypt32)
+
+
+
+# Build main_p2p 
+add_executable(main_p2p
+    src/main_p2p.cpp
+    src/blockchain/Block.cpp
+    src/blockchain/BlockChain.cpp
+    src/utxomanager/UTXOManager.cpp
+    src/sha256/SHA256.cpp
+    src/crypto/Crypto.cpp
+    src/transaction/Transaction.cpp
+    src/mempool/Mempool.cpp
+    src/p2p/Node.cpp
+    src/p2p/NetworkSimulator.cpp
+)
+
+target_link_libraries(main_p2p OpenSSL::Crypto OpenSSL::SSL ws2_32 crypt32)

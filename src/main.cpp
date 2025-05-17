@@ -16,7 +16,7 @@ constexpr int EXPECTED_TIME = BLOCK_INTERVAL_MINUTES * DIFFICULTY_ADJUSTMENT_INT
 double calculateTransactionFee(const Transaction& tx, const UTXOManager& utxos) {
     double inputSum = 0.0;
     for (const auto& in : tx.inputs) {
-        auto utxo = utxos.getUTXO(in.prevTxId, in.outputIndex);
+        std::optional<TxOut> utxo = utxos.getUTXO(in.prevTxId, in.outputIndex);
         if (utxo.has_value()) {
             inputSum += utxo->amount;
         }
